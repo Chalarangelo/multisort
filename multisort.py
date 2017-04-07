@@ -2,8 +2,6 @@ import sys
 import random
 import time
 
-# Debugging flag
-debug = True
 # Number of sorting algorithms
 NUM_OF_SORTERS = 10
 
@@ -87,15 +85,18 @@ def stooge_sort(items, start, end):
 		stooge_sort(items,start+t,end)
 		stooge_sort(items,start,end-t)
 
-if len(sys.argv) != 3:
-	print('Error! Please use "', str(sys.argv[0]),' [filename] [seed]" to run the multisort program')
+if len(sys.argv) < 3:
+	print('Error! Please use "', str(sys.argv[0]),' [filename] [seed] [full_output]" to run the multisort program')
 	print('[filename] - The name of the file from where the values will be read (space delimited).')
 	print('[seed] - The seed used for the randomizer.')
+	print('[full_output] - (Optional) 1 or 0 (1 meaning print all information, 0 print only the results).')
 	print()
 	sys.exit()
 else:
 	# Read data from file and create the numbers list
 	numbers = [int(n) for n in ' '.join([line.strip() for line in open(str(sys.argv[1]))]).split()]
+	debug = False
+	if(len(sys.argv) > 3 and int(sys.argv[3]) == 1): debug = True
 	# If the list is too short, exit
 	if len(numbers) < 10:
 		print('Please use a list of 10 or more elements! The program is now terminating...')
@@ -136,9 +137,10 @@ else:
 		elif sorter == 9:
 			start_pos = random.randint(0,len(numbers)-root_len-1)
 			stooge_sort(numbers, start_pos, random.randint(start_pos+root_len//3, start_pos+root_len-1))
-		print('Iteration',iter)
-		print('List:', numbers)
-		print()
+		if debug:
+			print('Iteration',iter)
+			print('List:', numbers)
+			print()
 		iter += 1
 	# Get time and iterator
 	end_time = time.time()
